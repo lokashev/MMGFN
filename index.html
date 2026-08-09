@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админка - Планы и Задачи</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Управление планами</h1>
+        
+        <div class="card">
+            <h3>Добавить план на дату</h3>
+            <input type="date" id="plan-date">
+            <div class="grid-inputs">
+                <input type="number" id="plan-sim" placeholder="СИМ">
+                <input type="number" id="plan-abon" placeholder="Абонементы">
+                <input type="number" id="plan-tovar" placeholder="Товарка (₽)">
+                <input type="number" id="plan-aks" placeholder="Аксессуары (₽)">
+                <input type="number" id="plan-finka" placeholder="Финка (₽)">
+            </div>
+            <button class="btn-primary" onclick="addPlan()">Сохранить план</button>
+        </div>
+
+        <h3>Текущие планы</h3>
+        <div id="plans-list" class="plans-list">
+            <!-- Планы появятся здесь -->
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
