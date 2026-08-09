@@ -1,6 +1,8 @@
 const SUPABASE_URL = 'https://cqyziulpcsywkgrttzey.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_eV00TOezDmw9P8k5-Pf0XQ_jlrmyYwk';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Переименовали supabase в db, чтобы не было конфликта
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Переключение вкладок
 function switchTab(tabName) {
@@ -26,7 +28,7 @@ async function addPlan() {
         finka: parseInt(document.getElementById('plan-finka').value) || 0
     };
 
-    const { error } = await supabase.from('plans').insert([planData]);
+    const { error } = await db.from('plans').insert([planData]);
     if (error) return alert('Ошибка: ' + error.message);
     
     alert('План сохранен!');
@@ -34,7 +36,7 @@ async function addPlan() {
 }
 
 async function loadPlans() {
-    const { data } = await supabase.from('plans').select('*').order('start_date', { ascending: true });
+    const { data } = await db.from('plans').select('*').order('start_date', { ascending: true });
     const list = document.getElementById('plans-list');
     list.innerHTML = '';
     
@@ -60,7 +62,7 @@ async function loadPlans() {
 }
 
 async function deletePlan(id) {
-    await supabase.from('plans').delete().eq('id', id);
+    await db.from('plans').delete().eq('id', id);
     loadPlans();
 }
 
@@ -83,7 +85,7 @@ async function saveEdit() {
         aks: parseInt(document.getElementById('edit-aks').value) || 0,
         finka: parseInt(document.getElementById('edit-finka').value) || 0
     };
-    await supabase.from('plans').update(updatedData).eq('id', id);
+    await db.from('plans').update(updatedData).eq('id', id);
     closeModal();
     loadPlans();
 }
@@ -99,7 +101,7 @@ async function addTask() {
     const userId = document.getElementById('task-user-id').value;
     if (!name || !sched) return alert('Заполните название и расписание!');
 
-    const { error } = await supabase.from('tasks').insert([{ task_name: name, schedule_info: sched, target_user_id: parseInt(userId) || 0 }]);
+    const { error } = await db.from('tasks').insert([{ task_name: name, schedule_info: sched, target_user_id: parseInt(userId) || 0 }]);
     if (error) return alert('Ошибка: ' + error.message);
     
     alert('Задача создана!');
@@ -107,7 +109,7 @@ async function addTask() {
 }
 
 async function loadTasks() {
-    const { data } = await supabase.from('tasks').select('*').order('id', { ascending: false });
+    const { data } = await db.from('tasks').select('*').order('id', { ascending: false });
     const list = document.getElementById('tasks-list');
     list.innerHTML = '';
     
@@ -130,7 +132,7 @@ async function loadTasks() {
 }
 
 async function deleteTask(id) {
-    await supabase.from('tasks').delete().eq('id', id);
+    await db.from('tasks').delete().eq('id', id);
     loadTasks();
 }
 
