@@ -1,14 +1,11 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
 body { background: #F3F4F6; color: #111827; display: flex; justify-content: center; min-height: 100vh; }
 .app-container { width: 100%; max-width: 480px; background: #F3F4F6; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.1); padding-bottom: 40px; }
-
 .screen { display: none; padding: 20px; }
 .screen.active { display: block; }
-
 .header { margin-top: 40px; margin-bottom: 30px; }
 .header h1 { font-size: 28px; font-weight: 700; }
 .header p { color: #6B7280; font-size: 16px; margin-top: 5px; }
-
 .card { background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; }
 .card h3 { margin-bottom: 15px; font-size: 18px; }
 
@@ -19,12 +16,11 @@ input, select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px sol
 
 .btn-primary, .btn-outline, .btn-danger { width: 100%; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; margin-bottom: 12px; }
 .btn-primary { background: #6C63FF; color: #fff; }
-.btn-outline { background: transparent; color: #6C63FF; border: 2px solid #6C63FF; }
 .btn-danger { background: #EF4444; color: #fff; }
 .btn-primary:active { transform: scale(0.98); }
 
 .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-.tab-btn { flex: 1; padding: 10px; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.tab-btn { flex: 1; padding: 10px; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; }
 .tab-btn.active { background: #6C63FF; color: #fff; border: none; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
@@ -34,13 +30,15 @@ input, select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px sol
 .list-info b { display: block; margin-bottom: 5px; font-size: 16px; }
 .list-info p { font-size: 13px; color: #6B7280; }
 .list-actions { display: flex; gap: 8px; }
-.btn-edit { background: #F59E0B; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
 .btn-delete { background: #EF4444; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
 
 .section-title { margin: 30px 0 15px; font-size: 18px; font-weight: 600; }
 
-.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
-.modal.active { display: flex; }
-.modal-content { background: #fff; width: 100%; max-width: 400px; padding: 30px; border-radius: 16px; }
-.modal-actions { display: flex; gap: 10px; }
-.modal-actions button { flex: 1; margin-bottom: 0; }
+/* Стили для таблиц План/Факт */
+.dashboard-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.dashboard-table th, .dashboard-table td { text-align: left; padding: 10px 5px; border-bottom: 1px solid #eee; }
+.dashboard-table th { color: #6B7280; font-weight: 500; font-size: 12px; text-transform: uppercase; }
+.dashboard-table td { font-weight: 600; }
+.fact-good { color: #10B981; }
+.fact-bad { color: #EF4444; }
+.forecast { color: #6C63FF; font-size: 12px; font-weight: 400; display: block; margin-top: 2px;}
