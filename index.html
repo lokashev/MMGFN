@@ -16,26 +16,33 @@
         <div id="login-screen" class="screen active">
             <div class="header">
                 <h1>Sales Tracker</h1>
-                <p>Войдите в систему</p>
+                <p>Авторизация</p>
             </div>
             <div class="card">
-                <button class="btn-primary" onclick="loginAs('admin')">Войти как Админ</button>
-                <button class="btn-outline" onclick="loginAs('employee')">Войти как Сотрудник</button>
+                <input type="password" id="emp-id-input" placeholder="Введите 8-значный табельный номер" maxlength="8">
+                <button class="btn-primary" onclick="login()">Войти</button>
             </div>
         </div>
 
         <!-- ЭКРАН СОТРУДНИКА -->
         <div id="employee-screen" class="screen">
             <div class="header">
-                <h1>Мои задачи</h1>
-                <p>Выполните план на сегодня</p>
+                <h1>Панель сотрудника</h1>
+                <p id="emp-welcome">Добро пожаловать!</p>
             </div>
             
             <div class="card">
-                <h3>📊 Внести продажи</h3>
+                <h3>📊 План / Факт на сегодня</h3>
+                <div id="emp-dashboard" class="dashboard-table"></div>
+            </div>
+
+            <div class="card">
+                <h3>➕ Внести продажи за сегодня</h3>
                 <div class="grid-inputs">
                     <input type="number" id="emp-sim" placeholder="СИМ (шт)">
                     <input type="number" id="emp-abon" placeholder="Абонементы (шт)">
+                    <input type="number" id="emp-internet" placeholder="Интернет (шт)">
+                    <input type="number" id="emp-cards" placeholder="Банк. карты (шт)">
                     <input type="number" id="emp-tovar" placeholder="Товарка (₽)">
                     <input type="number" id="emp-aks" placeholder="Аксессуары (₽)">
                     <input type="number" id="emp-finka" placeholder="Фин. услуги (₽)">
@@ -50,16 +57,23 @@
         <!-- ЭКРАН АДМИНА -->
         <div id="admin-screen" class="screen">
             <div class="header">
-                <h1>Панель управления</h1>
+                <h1>Панель Админа</h1>
             </div>
             
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('plans')">📊 Планы</button>
+                <button class="tab-btn active" onclick="switchTab('stats')">📈 Статистика</button>
+                <button class="tab-btn" onclick="switchTab('plans')">📊 Планы</button>
                 <button class="tab-btn" onclick="switchTab('tasks')">📝 Задачи</button>
-                <button class="tab-btn" onclick="switchTab('sales')">💰 Продажи</button>
             </div>
 
-            <div id="tab-plans" class="tab-content active">
+            <div id="tab-stats" class="tab-content active">
+                <div class="card">
+                    <h3>Выполнение за неделю</h3>
+                    <div id="weekly-stats" class="dashboard-table"></div>
+                </div>
+            </div>
+
+            <div id="tab-plans" class="tab-content">
                 <div class="card">
                     <h3>Выставить план на период</h3>
                     <div class="date-range">
@@ -69,6 +83,8 @@
                     <div class="grid-inputs">
                         <input type="number" id="plan-sim" placeholder="СИМ">
                         <input type="number" id="plan-abon" placeholder="Абонементы">
+                        <input type="number" id="plan-internet" placeholder="Интернет">
+                        <input type="number" id="plan-cards" placeholder="Карты">
                         <input type="number" id="plan-tovar" placeholder="Товарка (₽)">
                         <input type="number" id="plan-aks" placeholder="Аксессуары (₽)">
                         <input type="number" id="plan-finka" placeholder="Финка (₽)">
@@ -80,40 +96,15 @@
 
             <div id="tab-tasks" class="tab-content">
                 <div class="card">
-                    <h3>Создать задачу с напоминаниями</h3>
+                    <h3>Создать задачу</h3>
                     <input type="text" id="task-name" placeholder="Название (Продать кредитку)">
                     <select id="task-interval">
                         <option value="0">Без напоминаний (разовая)</option>
                         <option value="60">Напоминать каждый час</option>
-                        <option value="120">Напоминать каждые 2 часа</option>
                     </select>
                     <button class="btn-primary" onclick="addTask()">Создать задачу</button>
                 </div>
                 <div id="tasks-list" class="list"></div>
-            </div>
-
-            <div id="tab-sales" class="tab-content">
-                <h3 class="section-title">Сводка продаж</h3>
-                <div id="sales-list" class="list"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Модальное окно для редактирования плана -->
-    <div id="edit-modal" class="modal">
-        <div class="modal-content">
-            <h3>Редактировать план</h3>
-            <input type="hidden" id="edit-id">
-            <div class="grid-inputs">
-                <input type="number" id="edit-sim" placeholder="СИМ">
-                <input type="number" id="edit-abon" placeholder="Абонементы">
-                <input type="number" id="edit-tovar" placeholder="Товарка">
-                <input type="number" id="edit-aks" placeholder="Аксессуары">
-                <input type="number" id="edit-finka" placeholder="Финка">
-            </div>
-            <div class="modal-actions">
-                <button class="btn-danger" onclick="closeModal()">Отмена</button>
-                <button class="btn-primary" onclick="saveEdit()">Сохранить</button>
             </div>
         </div>
     </div>
