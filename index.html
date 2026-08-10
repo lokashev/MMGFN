@@ -44,19 +44,23 @@
             <div id="plans-list" class="list"></div>
         </div>
 
-        <!-- Раздел Задачи -->
+                <!-- Раздел Задачи -->
         <div id="tab-tasks" class="tab-content">
             <div class="card">
-                <h3>Создать задачу</h3>
-                <input type="text" id="task-name" placeholder="Название (Мониторинг цен)">
-                <input type="text" id="task-schedule" placeholder="Расписание (Пн, Чт, Сб - 13:00)">
-                <input type="number" id="task-user-id" placeholder="ID сотрудника в Telegram">
+                <h3>Создать задачу с напоминаниями</h3>
+                <input type="text" id="task-name" placeholder="Название (Продать кредитную карту)">
+                <input type="number" id="task-user-id" placeholder="ID общего чата или сотрудника">
+                <select id="task-interval">
+                    <option value="0">Без напоминаний (разовая)</option>
+                    <option value="60">Каждый 1 час</option>
+                    <option value="120">Каждые 2 часа</option>
+                    <option value="180">Каждые 3 часа</option>
+                </select>
                 <button class="btn-primary" onclick="addTask()">Создать задачу</button>
             </div>
-            <h3>Текущие задачи</h3>
+            <h3>Активные задачи</h3>
             <div id="tasks-list" class="list"></div>
         </div>
-    </div>
 
     <!-- Модальное окно для редактирования -->
     <div id="edit-modal" class="modal">
