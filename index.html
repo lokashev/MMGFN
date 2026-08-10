@@ -2,67 +2,104 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админка - Планы и Задачи</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6C63FF">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Sales Tracker</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Панель управления</h1>
+    <div class="app-container">
         
-        <!-- Вкладки -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('plans')">📊 Планы</button>
-            <button class="tab-btn" onclick="switchTab('tasks')">📝 Задачи</button>
+        <!-- ЭКРАН ВХОДА -->
+        <div id="login-screen" class="screen active">
+            <div class="header">
+                <h1>Sales Tracker</h1>
+                <p>Войдите в систему</p>
+            </div>
+            <div class="card">
+                <button class="btn-primary" onclick="loginAs('admin')">Войти как Админ</button>
+                <button class="btn-outline" onclick="loginAs('employee')">Войти как Сотрудник</button>
+            </div>
         </div>
 
-        <!-- Раздел Планы -->
-        <div id="tab-plans" class="tab-content active">
+        <!-- ЭКРАН СОТРУДНИКА -->
+        <div id="employee-screen" class="screen">
+            <div class="header">
+                <h1>Мои задачи</h1>
+                <p>Выполните план на сегодня</p>
+            </div>
+            
             <div class="card">
-                <h3>Выставить план на период</h3>
-                <div class="date-range">
-                    <div>
-                        <label>С даты</label>
-                        <input type="date" id="plan-start-date">
-                    </div>
-                    <div>
-                        <label>По дату</label>
-                        <input type="date" id="plan-end-date">
-                    </div>
-                </div>
+                <h3>📊 Внести продажи</h3>
                 <div class="grid-inputs">
-                    <input type="number" id="plan-sim" placeholder="СИМ (шт)">
-                    <input type="number" id="plan-abon" placeholder="Абонементы (шт)">
-                    <input type="number" id="plan-tovar" placeholder="Товарка (₽)">
-                    <input type="number" id="plan-aks" placeholder="Аксессуары (₽)">
-                    <input type="number" id="plan-finka" placeholder="Финка (₽)">
+                    <input type="number" id="emp-sim" placeholder="СИМ (шт)">
+                    <input type="number" id="emp-abon" placeholder="Абонементы (шт)">
+                    <input type="number" id="emp-tovar" placeholder="Товарка (₽)">
+                    <input type="number" id="emp-aks" placeholder="Аксессуары (₽)">
+                    <input type="number" id="emp-finka" placeholder="Фин. услуги (₽)">
                 </div>
-                <button class="btn-primary" onclick="addPlan()">Сохранить план</button>
+                <button class="btn-primary" onclick="submitSales()">Отправить данные</button>
             </div>
-            <h3>Текущие планы</h3>
-            <div id="plans-list" class="list"></div>
+
+            <h3 class="section-title">⏰ Активные задачи</h3>
+            <div id="employee-tasks" class="task-list"></div>
         </div>
 
-                <!-- Раздел Задачи -->
-        <div id="tab-tasks" class="tab-content">
-            <div class="card">
-                <h3>Создать задачу с напоминаниями</h3>
-                <input type="text" id="task-name" placeholder="Название (Продать кредитную карту)">
-                <input type="number" id="task-user-id" placeholder="ID общего чата или сотрудника">
-                <select id="task-interval">
-                    <option value="0">Без напоминаний (разовая)</option>
-                    <option value="60">Каждый 1 час</option>
-                    <option value="120">Каждые 2 часа</option>
-                    <option value="180">Каждые 3 часа</option>
-                </select>
-                <button class="btn-primary" onclick="addTask()">Создать задачу</button>
+        <!-- ЭКРАН АДМИНА -->
+        <div id="admin-screen" class="screen">
+            <div class="header">
+                <h1>Панель управления</h1>
             </div>
-            <h3>Активные задачи</h3>
-            <div id="tasks-list" class="list"></div>
-        </div>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('plans')">📊 Планы</button>
+                <button class="tab-btn" onclick="switchTab('tasks')">📝 Задачи</button>
+                <button class="tab-btn" onclick="switchTab('sales')">💰 Продажи</button>
+            </div>
 
-    <!-- Модальное окно для редактирования -->
+            <div id="tab-plans" class="tab-content active">
+                <div class="card">
+                    <h3>Выставить план на период</h3>
+                    <div class="date-range">
+                        <div><label>С даты</label><input type="date" id="plan-start-date"></div>
+                        <div><label>По дату</label><input type="date" id="plan-end-date"></div>
+                    </div>
+                    <div class="grid-inputs">
+                        <input type="number" id="plan-sim" placeholder="СИМ">
+                        <input type="number" id="plan-abon" placeholder="Абонементы">
+                        <input type="number" id="plan-tovar" placeholder="Товарка (₽)">
+                        <input type="number" id="plan-aks" placeholder="Аксессуары (₽)">
+                        <input type="number" id="plan-finka" placeholder="Финка (₽)">
+                    </div>
+                    <button class="btn-primary" onclick="addPlan()">Сохранить план</button>
+                </div>
+                <div id="plans-list" class="list"></div>
+            </div>
+
+            <div id="tab-tasks" class="tab-content">
+                <div class="card">
+                    <h3>Создать задачу с напоминаниями</h3>
+                    <input type="text" id="task-name" placeholder="Название (Продать кредитку)">
+                    <select id="task-interval">
+                        <option value="0">Без напоминаний (разовая)</option>
+                        <option value="60">Напоминать каждый час</option>
+                        <option value="120">Напоминать каждые 2 часа</option>
+                    </select>
+                    <button class="btn-primary" onclick="addTask()">Создать задачу</button>
+                </div>
+                <div id="tasks-list" class="list"></div>
+            </div>
+
+            <div id="tab-sales" class="tab-content">
+                <h3 class="section-title">Сводка продаж</h3>
+                <div id="sales-list" class="list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для редактирования плана -->
     <div id="edit-modal" class="modal">
         <div class="modal-content">
             <h3>Редактировать план</h3>
@@ -81,6 +118,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app.js"></script>
 </body>
 </html>
