@@ -95,16 +95,37 @@ function closeModal() {
 }
 
 // === ЛОГИКА ЗАДАЧ ===
+const BOT_TOKEN = 'ВАШ_ТОКЕН_ОТ_BOTFATHER'; // Вставьте токен бота!
+const ADMIN_ID = 123456789; // Ваш Telegram ID
+
+// Функция мгновенной отправки сообщения вам в Telegram
+async function notifyAdmin(text) {
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(text)}`;
+    await fetch(url);
+}
+
 async function addTask() {
     const name = document.getElementById('task-name').value;
-    const sched = document.getElementById('task-schedule').value;
-    const userId = document.getElementById('task-user-id').value;
-    if (!name || !sched) return alert('Заполните название и расписание!');
+    const chatId = document.getElementById('task-user-id').value;
+    const interval = parseInt(document.getElementById('task-interval').value);
+    
+    if (!name || !chatId) return alert('Заполните название и ID чата!');
 
-    const { error } = await db.from('tasks').insert([{ task_name: name, schedule_info: sched, target_user_id: parseInt(userId) || 0 }]);
+    const { data, error } = await db.from('tasks').insert([{ 
+        task_name: name, 
+        schedule_info: interval > 0 ? `Каждые ${interval} мин` : 'Разовая',
+        target_chat_id: parseInt(chatId),
+        interval_mins: interval,
+        is_active: true
+    }]).select();
+
     if (error) return alert('Ошибка: ' + error.message);
     
-    alert('Задача создана!');
+    // Отправляем уведомление админу
+    await notifyAdmin(`🆕 *Новая задача создана!*\n\n📝 ${name}\n⏰ ${interval > 0 ? 'Напоминания каждые ' + interval + ' мин' : 'Без напоминаний'}\n📍 Чат: ${chatId}`);
+    
+    alert('Задача создана! Бот начнет работу.');
+    document.getElementById('task-name').value = '';
     loadTasks();
 }
 
@@ -116,12 +137,13 @@ async function loadTasks() {
     if (data.length === 0) return list.innerHTML = '<p style="color:#777; text-align:center;">Задач нет</p>';
 
     data.forEach(task => {
+        const status = task.is_active ? '🟢 Активна' : '✅ Выполнена';
         const div = document.createElement('div');
         div.className = 'list-item';
         div.innerHTML = `
             <div class="list-info">
                 <b>📝 ${task.task_name}</b>
-                <p>⏰ ${task.schedule_info} | ID: ${task.target_user_id || 'Не указан'}</p>
+                <p>⏰ ${task.schedule_info} | ${status} | Чат: ${task.target_chat_id}</p>
             </div>
             <div class="list-actions">
                 <button class="btn-delete" onclick="deleteTask(${task.id})">✖</button>
